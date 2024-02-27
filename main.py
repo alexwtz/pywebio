@@ -1,22 +1,19 @@
 from pywebio.input import input, NUMBER
-from pywebio.output import put_text, use_scope
+from pywebio.output import put_text, use_scope,put_buttons
 from pywebio.exceptions import SessionClosedException
+from pywebio import *
+import os
 
-def demo():
-    
+def start(test=''):
+    stream = os.popen('python prog.py')
+    output = stream.read()
+    put_text(output)
 
-    put_text("Hello")
-    age = input("What is your name? ")
-    put_text(f"Hello {age}")
-    #put_text("You are old")
-    while age != 2:
-        age = input("Enter your age: ", type=NUMBER)
-        with use_scope('scope2', clear=True):  # enter the existing scope and clear the previous content
-            put_text(f"you have selected {age}")
-    put_text("you win")
-    
-if __name__ == "__main__":
+
+def main():
     try:
-        demo()
+        put_buttons(['start'],onclick=start)
     except SessionClosedException:
         print("The session was closed unexpectedly")
+
+start_server(main, port=8880, debug=True)
